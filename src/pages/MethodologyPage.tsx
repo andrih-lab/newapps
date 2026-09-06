@@ -141,13 +141,35 @@ export function MethodologyPage() {
       </section>
 
       <section>
+        <h2 className="text-base font-semibold text-gray-900">Full Teks &amp; Matriks Ekstraksi</h2>
+        <p className="mt-1">
+          PDF dibaca sepenuhnya di peramban dengan pdf.js — parsing dokumen didelegasikan pdf.js ke
+          worker internalnya sendiri, sehingga tetap berjalan di luar thread utama tanpa perlu
+          membungkusnya lagi dalam Web Worker buatan sendiri. File PDF{' '}
+          <strong>tidak pernah disimpan</strong> ke IndexedDB atau server; hanya nama file dan teks hasil
+          ekstraksi (untuk pencarian dalam dokumen) yang tersimpan. Begitu tab/browser ditutup, file perlu
+          dipilih ulang, sesuai desain di Bagian 4.
+        </p>
+        <p className="mt-2">
+          Kolom matriks dapat dikustomisasi per proyek. Setiap isian penting sebaiknya disertai kutipan
+          verbatim (potongan kalimat asli + nomor halaman) agar bisa ditelusuri kembali ke sumbernya.
+        </p>
+        <p className="mt-2">
+          Alternatif pengisian di luar aplikasi memakai <strong>template CSV</strong> (bukan .xlsx asli —
+          lihat catatan keamanan di README perihal dependency SheetJS/xlsx). Saat diunggah kembali, judul
+          di CSV dicocokkan ke record memakai kemiripan Jaro-Winkler yang sama seperti Modul 2 (ambang
+          0,85), dan kelengkapan tiap kolom + kutipan diperiksa sebelum diterapkan.
+        </p>
+      </section>
+
+      <section>
         <h2 className="text-base font-semibold text-gray-900">Diagram PRISMA</h2>
         <p className="mt-1">
-          Setiap kotak dihitung langsung dari data proyek (identifikasi per sumber, duplikat dibuang,
-          disaring, dieksklusi saat skrining abstrak beserta rinciannya per label). Tahap "dinilai
-          kelayakan full teks" dan "dieksklusi full teks" masih placeholder karena Modul 5 (unggah &amp;
-          baca PDF) belum dikerjakan — nilainya sementara disamakan dengan hasil skrining abstrak dan
-          ditandai eksplisit di halaman PRISMA, bukan disembunyikan.
+          Setiap kotak dihitung langsung dari data proyek: identifikasi per sumber, duplikat dibuang,
+          disaring, dieksklusi saat skrining abstrak beserta rinciannya per label, dinilai kelayakan full
+          teks, dieksklusi full teks beserta rinciannya, hingga disertakan dalam sintesis. Bila masih ada
+          record yang belum dinilai di tahap skrining atau full teks, halaman PRISMA menampilkan
+          peringatan eksplisit bahwa angka pada tahap berikutnya masih bisa berubah.
         </p>
         <Ref>
           Referensi: Page, M. J. et al. (2021). "The PRISMA 2020 statement: an updated guideline for

@@ -1,10 +1,21 @@
-/** Satu proyek SLR/bibliometrik milik pengguna. */
+/** Definisi satu kolom matriks ekstraksi (Bagian 4, Modul 5 — "kolom dapat dikustomisasi"). */
+export interface MatrixColumnDef {
+  key: string;
+  label: string;
+}
+
+/**
+ * Satu proyek SLR/bibliometrik milik pengguna.
+ * `kolomEkstraksi` di luar Bagian 5, opsional (proyek lama tanpa field ini
+ * memakai preset bawaan Modul 5 — lihat extraction/defaultColumns.ts).
+ */
 export interface Project {
   id: string;
   nama: string;
   pertanyaanPenelitian: string;
   dibuat: string; // ISO datetime
   diubah: string; // ISO datetime
+  kolomEkstraksi?: MatrixColumnDef[];
 }
 
 /** Sumber data yang bisa dipakai untuk pencarian atau asal impor. */

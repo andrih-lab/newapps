@@ -8,6 +8,7 @@ import { DedupePage } from './pages/DedupePage';
 import { BibliometricsPage } from './pages/BibliometricsPage';
 import { CriteriaPage } from './pages/CriteriaPage';
 import { ScreeningPage } from './pages/ScreeningPage';
+import { ExtractionPage } from './pages/ExtractionPage';
 import { PrismaPage } from './pages/PrismaPage';
 import { ExportPage } from './pages/ExportPage';
 import { MethodologyPage } from './pages/MethodologyPage';
@@ -26,6 +27,7 @@ export function AppRouter() {
             <Route path="bibliometrik" element={<BibliometricsPage />} />
             <Route path="kriteria" element={<CriteriaPage />} />
             <Route path="skrining" element={<ScreeningPage />} />
+            <Route path="ekstraksi" element={<ExtractionPage />} />
             <Route path="prisma" element={<PrismaPage />} />
             <Route path="ekspor" element={<ExportPage />} />
           </Route>

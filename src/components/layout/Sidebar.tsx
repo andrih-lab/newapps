@@ -6,6 +6,7 @@ const LINKS = [
   { to: 'bibliometrik', label: 'Bibliometrik' },
   { to: 'kriteria', label: 'Kriteria' },
   { to: 'skrining', label: 'Skrining' },
+  { to: 'ekstraksi', label: 'Full Teks & Ekstraksi' },
   { to: 'prisma', label: 'PRISMA' },
   { to: 'ekspor', label: 'Ekspor' },
 ];

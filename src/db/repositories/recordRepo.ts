@@ -94,3 +94,42 @@ export async function resetScreeningDecision(id: string): Promise<void> {
     tanggalKeputusan: null,
   });
 }
+
+/** Record yang lolos skrining abstrak ("termasuk") — inilah cakupan Modul 5 (full teks). */
+export function listRecordsForExtraction(projectId: string): Promise<RecordItem[]> {
+  return db.record
+    .where('projectId')
+    .equals(projectId)
+    .filter((r) => r.statusDuplikat !== 'duplikat' && r.statusSkrining === 'termasuk')
+    .toArray();
+}
+
+export async function setPdfInfo(id: string, pdfFileName: string, pdfTeksEkstraksi: string): Promise<void> {
+  await db.record.update(id, { pdfFileName, pdfTeksEkstraksi });
+}
+
+const fullTextKeputusanToStatus: Record<'masuk' | 'tolak', StatusSkrining> = {
+  masuk: 'termasuk',
+  tolak: 'dikecualikan',
+};
+
+/** Keputusan kelayakan full teks, dicatat terpisah dari skrining abstrak (Bagian 4, Modul 5 — untuk PRISMA). */
+export async function setFullTextDecision(
+  id: string,
+  keputusan: 'masuk' | 'tolak',
+  labelEksklusiFullText: string | null,
+): Promise<void> {
+  await db.record.update(id, {
+    statusFullText: fullTextKeputusanToStatus[keputusan],
+    labelEksklusiFullText: keputusan === 'tolak' ? labelEksklusiFullText : null,
+    tanggalKeputusanFullText: new Date().toISOString(),
+  });
+}
+
+export async function resetFullTextDecision(id: string): Promise<void> {
+  await db.record.update(id, {
+    statusFullText: 'belum',
+    labelEksklusiFullText: null,
+    tanggalKeputusanFullText: null,
+  });
+}

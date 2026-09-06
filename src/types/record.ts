@@ -43,6 +43,16 @@ export interface RecordItem {
   sourceFile: string | null;
   /** waktu record ini masuk ke proyek. */
   diimporPada: string; // ISO datetime
+
+  // --- Tambahan di luar Bagian 5, dibutuhkan Modul 5 (full text) ---
+  /** Kelayakan pada tahap full teks, terpisah dari statusSkrining (skrining abstrak). */
+  statusFullText: StatusSkrining;
+  labelEksklusiFullText: string | null;
+  tanggalKeputusanFullText: string | null;
+  /** Nama file PDF terakhir yang dipilih pengguna (file itu sendiri TIDAK disimpan — Bagian 4, Modul 5). */
+  pdfFileName: string | null;
+  /** Teks hasil ekstraksi pdf.js (seluruh halaman, digabung dengan penanda halaman), untuk pencarian lintas sesi. */
+  pdfTeksEkstraksi: string | null;
 }
 
 export type TipeKriteria = 'inklusi' | 'eksklusi';

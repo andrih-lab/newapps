@@ -71,6 +71,12 @@ export function toRecordItem(
     similarityScore: null,
     sourceFile,
     diimporPada: now,
+
+    statusFullText: 'belum',
+    labelEksklusiFullText: null,
+    tanggalKeputusanFullText: null,
+    pdfFileName: null,
+    pdfTeksEkstraksi: null,
   };
 }
 

@@ -2,7 +2,9 @@ import { useEffect, useState } from 'react';
 import { useProjectContext } from '../hooks/useProjectContext';
 import { listRecordsByProject } from '../db/repositories/recordRepo';
 import { listScreeningLogsByRecordIds } from '../db/repositories/screeningLogRepo';
-import type { RecordItem, ScreeningLog } from '../types/record';
+import { listExtractionsByRecordIds } from '../db/repositories/extractionRepo';
+import { getMatrixColumns } from '../extraction/defaultColumns';
+import type { Extraction, RecordItem, ScreeningLog } from '../types/record';
 import { recordsToRis } from '../lib/exportRis';
 import { recordsToBibtex } from '../lib/exportBibtex';
 import { downloadBlob, downloadCsv, toCsv } from '../lib/exportCsv';
@@ -16,16 +18,19 @@ export function ExportPage() {
   const { project } = useProjectContext();
   const [records, setRecords] = useState<RecordItem[]>([]);
   const [logs, setLogs] = useState<ScreeningLog[]>([]);
+  const [extractions, setExtractions] = useState<Extraction[]>([]);
 
   useEffect(() => {
     listRecordsByProject(project.id).then(async (r) => {
       setRecords(r);
       setLogs(await listScreeningLogsByRecordIds(r.map((x) => x.id)));
+      setExtractions(await listExtractionsByRecordIds(r.map((x) => x.id)));
     });
   }, [project.id]);
 
   const termasuk = records.filter((r) => r.statusSkrining === 'termasuk');
   const recordById = new Map(records.map((r) => [r.id, r]));
+  const columns = getMatrixColumns(project.kolomEkstraksi);
 
   function handleExportRis() {
     downloadText('artikel-terpilih.ris', 'application/x-research-info-systems', recordsToRis(termasuk));
@@ -44,6 +49,24 @@ export function ExportPage() {
       penilai: l.penilai ?? '',
     }));
     downloadCsv('log-keputusan.csv', toCsv(rows));
+  }
+
+  function handleExportExtractionCsv() {
+    const rows = extractions.map((ex) => {
+      const record = recordById.get(ex.recordId);
+      const row: Record<string, unknown> = {
+        judul: record?.judul ?? '',
+        statusFullText: record?.statusFullText ?? '',
+        labelEksklusiFullText: record?.labelEksklusiFullText ?? '',
+      };
+      for (const col of columns) row[col.key] = ex.kolom[col.key] ?? '';
+      row.kutipanVerbatim = ex.kutipan.map((k) => `${k.teks}${k.halaman != null ? ` (hal. ${k.halaman})` : ''}`).join('; ');
+      return row;
+    });
+    downloadCsv(
+      'matriks-ekstraksi.csv',
+      toCsv(rows, ['judul', 'statusFullText', 'labelEksklusiFullText', ...columns.map((c) => c.key), 'kutipanVerbatim']),
+    );
   }
 
   function handleExportRecordsCsv() {
@@ -66,7 +89,7 @@ export function ExportPage() {
     <div className="space-y-6">
       <p className="text-sm text-gray-500">
         Total record: {records.length}. Artikel lolos skrining ("masuk"): {termasuk.length}. Log keputusan
-        tercatat: {logs.length}.
+        tercatat: {logs.length}. Matriks ekstraksi terisi: {extractions.length}.
       </p>
 
       <section className="rounded-md border border-gray-200 bg-white p-4">
@@ -91,6 +114,18 @@ export function ExportPage() {
         </p>
         <div className="mt-3">
           <Button variant="secondary" onClick={handleExportLogCsv} disabled={logs.length === 0}>
+            Unduh CSV
+          </Button>
+        </div>
+      </section>
+
+      <section className="rounded-md border border-gray-200 bg-white p-4">
+        <h2 className="text-base font-semibold text-gray-900">Matriks Ekstraksi</h2>
+        <p className="mt-1 text-sm text-gray-600">
+          Seluruh isian matriks ekstraksi (Modul 5) beserta kutipan verbatim, sebagai CSV.
+        </p>
+        <div className="mt-3">
+          <Button variant="secondary" onClick={handleExportExtractionCsv} disabled={extractions.length === 0}>
             Unduh CSV
           </Button>
         </div>

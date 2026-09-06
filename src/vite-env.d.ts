@@ -8,3 +8,9 @@ interface ImportMetaEnv {
 interface ImportMeta {
   readonly env: ImportMetaEnv;
 }
+
+/** Import Vite bergaya `?url` (dipakai untuk memuat worker pdf.js sebagai URL aset). */
+declare module '*?url' {
+  const src: string;
+  export default src;
+}

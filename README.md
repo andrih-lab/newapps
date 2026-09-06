@@ -4,7 +4,7 @@ Aplikasi web untuk membantu proses identifikasi, skrining, dan pelaporan
 Systematic Literature Review (SLR), sekaligus analisis bibliometrik. Seluruh
 pemrosesan berjalan di peramban (client-side), tanpa model bahasa.
 
-Status saat ini: **Pekan 1 & 2** dari rencana empat pekan selesai (lihat
+Status saat ini: **Pekan 1, 2 & 3** dari rencana empat pekan selesai (lihat
 `rancang-bangun-aplikasi-slr.md`, Bagian 7).
 
 ## Yang sudah ada di Pekan 1 — fondasi & demo tercepat
@@ -37,10 +37,29 @@ Status saat ini: **Pekan 1 & 2** dari rencana empat pekan selesai (lihat
   penolakan beruntun & kurva penemuan relevan.
 - Log keputusan skrining (siapa, kapan, alasan) tersimpan otomatis.
 - Diagram PRISMA 2020 digambar sebagai SVG langsung dari data, dengan
-  ekspor PNG/SVG/PDF. Tahap penilaian full teks masih placeholder (Modul 5
-  belum dikerjakan) dan ditandai eksplisit di halaman, bukan disembunyikan.
+  ekspor PNG/SVG/PDF.
 - Ekspor: artikel terpilih sebagai RIS/BibTeX, log keputusan sebagai CSV,
   seluruh record sebagai CSV (bisa dibuka langsung di Excel).
+
+## Yang sudah ada di Pekan 3 — full teks & matriks ekstraksi
+
+- Unggah PDF per artikel, dibaca dengan pdf.js langsung di peramban (parsing
+  didelegasikan ke worker internal pdf.js sendiri). Tampilan berdampingan:
+  PDF di kiri (navigasi halaman + pencarian teks dalam dokumen), formulir
+  matriks di kanan. **PDF tidak pernah disimpan** ke IndexedDB — hanya nama
+  file & teks hasil ekstraksi yang tersimpan; menutup tab berarti file perlu
+  dipilih ulang (sesuai Bagian 4).
+- Matriks ekstraksi dengan kolom bawaan (penulis, tahun, negara/lokasi,
+  desain penelitian, ukuran sampel, variabel, metode analisis, temuan utama,
+  keterbatasan) yang bisa dikustomisasi per proyek, plus kutipan verbatim
+  (kalimat asli + nomor halaman) untuk tiap isian penting.
+- Alternatif pengisian di luar aplikasi: unduh template CSV, isi di
+  Excel/Sheets, unggah kembali — divalidasi dengan pencocokan judul
+  (Jaro-Winkler, sama seperti Modul 2) dan pemeriksaan kelengkapan kolom.
+- Keputusan kelayakan full teks (termasuk/dieksklusi + alasan) dicatat
+  terpisah dari skrining abstrak, dan sekarang menjadi sumber data nyata
+  bagi diagram PRISMA (bukan lagi placeholder seperti di Pekan 2).
+- Ekspor matriks ekstraksi lengkap sebagai CSV.
 
 Parsing berat (BibTeX/RIS/CSV), deduplikasi, dan pelatihan/skoring active
 learning berjalan di Web Worker agar UI tidak beku. Daftar record memakai
@@ -49,10 +68,15 @@ virtualisasi agar tidak memuat ribuan baris sekaligus ke DOM.
 ## Keputusan teknis di luar tabel Bagian 3
 
 - **Ekspor "Excel" berupa CSV**, bukan `.xlsx` asli via SheetJS seperti
-  disebut di Bagian 3. Versi npm `xlsx` (SheetJS) yang tersedia punya CVE
-  prototype-pollution & ReDoS tanpa perbaikan resmi di registry npm. Karena
-  CSV dibuka native oleh Excel dan kebutuhan Pekan 2 hanya tabel datar,
-  dependency berisiko ini sengaja tidak dipakai.
+  disebut di Bagian 3 — termasuk template matriks ekstraksi & validator
+  impornya (Modul 5). Versi npm `xlsx` (SheetJS) yang tersedia punya CVE
+  prototype-pollution & ReDoS tanpa perbaikan resmi di registry npm, justru
+  di jalur *parse* yang persis dibutuhkan validator impor. Karena CSV dibuka
+  native oleh Excel/Sheets, dependency berisiko ini sengaja tidak dipakai.
+- **`pdfjs-dist` dikunci ke seri 4.x**, bukan versi 6.x terbaru. Versi 6.3
+  memakai fitur JavaScript sangat baru (`Map.prototype.getOrInsertComputed`)
+  yang memicu error tak tertangani di Chromium yang diuji — seri 4.x jauh
+  lebih matang dan kompatibel luas untuk target shared hosting.
 
 ## Menjalankan secara lokal
 

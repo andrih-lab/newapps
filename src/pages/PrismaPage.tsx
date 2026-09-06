@@ -58,6 +58,7 @@ export function PrismaPage() {
           rows={counts.identifikasi.perSumber.map((s) => ({ label: s.sumber, jumlah: s.jumlah }))}
         />
         <ReasonTable title="Rincian alasan eksklusi (skrining abstrak)" rows={counts.dieksklusiSkrining.alasan} />
+        <ReasonTable title="Rincian alasan eksklusi (full teks)" rows={counts.dieksklusiFullText.alasan} />
       </div>
     </div>
   );

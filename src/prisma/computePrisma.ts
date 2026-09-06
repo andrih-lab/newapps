@@ -16,20 +16,23 @@ export interface PrismaCounts {
     total: number;
     alasan: PrismaAlasan[];
   };
+  /** Belum dinilai pada tahap skrining abstrak. */
+  belumDinilai: number;
+  /** Lolos skrining abstrak — inilah cakupan yang dinilai kelayakan full teks (Modul 5). */
   dinilaiFullText: number;
   dieksklusiFullText: {
     total: number;
     alasan: PrismaAlasan[];
   };
   disertakan: number;
-  belumDinilai: number;
+  /** Lolos skrining abstrak tapi belum diputuskan kelayakan full teksnya. */
+  belumDinilaiFullText: number;
 }
 
 /**
  * Hitung tiap kotak diagram PRISMA 2020 langsung dari data record (Bagian 4, Modul 6).
- * Tahap "dinilai kelayakan full teks" & "dieksklusi full teks" masih placeholder
- * (Modul 5 / Pekan 3 belum dikerjakan) — di sini disamakan dengan hasil skrining
- * abstrak, dan UI wajib menyatakan ini secara eksplisit, bukan menyembunyikannya.
+ * Tahap full teks memakai RecordItem.statusFullText/labelEksklusiFullText yang diisi
+ * dari halaman Full Teks & Ekstraksi (Modul 5).
  */
 export function computePrismaCounts(records: RecordItem[]): PrismaCounts {
   const total = records.length;
@@ -42,27 +45,39 @@ export function computePrismaCounts(records: RecordItem[]): PrismaCounts {
   const nonDuplikat = records.filter((r) => r.statusDuplikat !== 'duplikat');
   const disaring = nonDuplikat.length;
 
-  const dieksklusiRecords = nonDuplikat.filter((r) => r.statusSkrining === 'dikecualikan');
-  const alasanMap = new Map<string, number>();
-  for (const r of dieksklusiRecords) {
-    const label = r.labelEksklusi ?? '(tanpa label)';
-    alasanMap.set(label, (alasanMap.get(label) ?? 0) + 1);
-  }
-  const alasan = Array.from(alasanMap.entries())
-    .map(([label, jumlah]) => ({ label, jumlah }))
-    .sort((a, b) => b.jumlah - a.jumlah);
-
-  const termasuk = nonDuplikat.filter((r) => r.statusSkrining === 'termasuk').length;
+  const dieksklusiSkriningRecords = nonDuplikat.filter((r) => r.statusSkrining === 'dikecualikan');
+  const alasanSkrining = ringkasAlasan(dieksklusiSkriningRecords.map((r) => r.labelEksklusi));
   const belumDinilai = nonDuplikat.filter((r) => r.statusSkrining === 'belum').length;
+
+  const eligibleFullText = nonDuplikat.filter((r) => r.statusSkrining === 'termasuk');
+  const dinilaiFullText = eligibleFullText.length;
+
+  const dieksklusiFullTextRecords = eligibleFullText.filter((r) => r.statusFullText === 'dikecualikan');
+  const alasanFullText = ringkasAlasan(dieksklusiFullTextRecords.map((r) => r.labelEksklusiFullText));
+
+  const disertakan = eligibleFullText.filter((r) => r.statusFullText === 'termasuk').length;
+  const belumDinilaiFullText = eligibleFullText.filter((r) => r.statusFullText === 'belum').length;
 
   return {
     identifikasi: { total, perSumber },
     duplikatDibuang,
     disaring,
-    dieksklusiSkrining: { total: dieksklusiRecords.length, alasan },
-    dinilaiFullText: termasuk,
-    dieksklusiFullText: { total: 0, alasan: [] },
-    disertakan: termasuk,
+    dieksklusiSkrining: { total: dieksklusiSkriningRecords.length, alasan: alasanSkrining },
     belumDinilai,
+    dinilaiFullText,
+    dieksklusiFullText: { total: dieksklusiFullTextRecords.length, alasan: alasanFullText },
+    disertakan,
+    belumDinilaiFullText,
   };
+}
+
+function ringkasAlasan(labels: Array<string | null>): PrismaAlasan[] {
+  const map = new Map<string, number>();
+  for (const raw of labels) {
+    const label = raw ?? '(tanpa label)';
+    map.set(label, (map.get(label) ?? 0) + 1);
+  }
+  return Array.from(map.entries())
+    .map(([label, jumlah]) => ({ label, jumlah }))
+    .sort((a, b) => b.jumlah - a.jumlah);
 }

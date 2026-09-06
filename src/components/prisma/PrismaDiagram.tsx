@@ -54,7 +54,7 @@ export function PrismaDiagram({ counts }: { counts: PrismaCounts }) {
       key: 'fulltext',
       title: 'Dinilai kelayakan full teks',
       count: counts.dinilaiFullText,
-      sub: 'Placeholder — Modul full teks (Pekan 3) belum dikerjakan',
+      sub: counts.belumDinilaiFullText > 0 ? `${counts.belumDinilaiFullText} belum diputuskan` : undefined,
     },
     { key: 'disertakan', title: 'Disertakan dalam sintesis', count: counts.disertakan },
   ];
@@ -62,7 +62,7 @@ export function PrismaDiagram({ counts }: { counts: PrismaCounts }) {
   const sideRows = [
     { title: 'Duplikat dibuang', count: counts.duplikatDibuang, afterRow: 0 },
     { title: 'Dieksklusi (skrining abstrak)', count: counts.dieksklusiSkrining.total, afterRow: 1 },
-    { title: 'Dieksklusi (full teks)', count: counts.dieksklusiFullText.total, afterRow: 2, sub: 'Belum berjalan' },
+    { title: 'Dieksklusi (full teks)', count: counts.dieksklusiFullText.total, afterRow: 2 },
   ];
 
   const height = boxY(mainRows.length - 1) + ROW_H + 20;
@@ -94,9 +94,15 @@ export function PrismaDiagram({ counts }: { counts: PrismaCounts }) {
       </div>
 
       {counts.belumDinilai > 0 && (
-        <p className="mb-2 text-xs text-amber-600">
-          {counts.belumDinilai} record belum dinilai di halaman Skrining — angka "disertakan" di bawah masih
+        <p className="mb-1 text-xs text-amber-600">
+          {counts.belumDinilai} record belum dinilai di halaman Skrining — angka pada tahap berikutnya masih
           bisa berubah.
+        </p>
+      )}
+      {counts.belumDinilaiFullText > 0 && (
+        <p className="mb-2 text-xs text-amber-600">
+          {counts.belumDinilaiFullText} record lolos skrining abstrak tapi belum dinilai kelayakan full
+          teksnya di halaman Full Teks & Ekstraksi — angka "disertakan" di bawah masih bisa berubah.
         </p>
       )}
 
@@ -139,7 +145,7 @@ export function PrismaDiagram({ counts }: { counts: PrismaCounts }) {
                 strokeWidth={1.5}
                 markerEnd="url(#prisma-arrow)"
               />
-              <FlowBox x={SIDE_X} y={sideY} w={SIDE_W} h={SIDE_H} title={side.title} count={side.count} sub={side.sub} tone="side" />
+              <FlowBox x={SIDE_X} y={sideY} w={SIDE_W} h={SIDE_H} title={side.title} count={side.count} tone="side" />
             </g>
           );
         })}
