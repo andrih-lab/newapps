@@ -1,0 +1,30 @@
+import { HashRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { AppShell } from './components/layout/AppShell';
+import { HomePage } from './pages/HomePage';
+import { ProjectListPage } from './pages/ProjectListPage';
+import { ProjectPage } from './pages/ProjectPage';
+import { ImportPage } from './pages/ImportPage';
+import { DedupePage } from './pages/DedupePage';
+import { BibliometricsPage } from './pages/BibliometricsPage';
+import { MethodologyPage } from './pages/MethodologyPage';
+
+export function AppRouter() {
+  return (
+    <HashRouter>
+      <AppShell>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/proyek" element={<ProjectListPage />} />
+          <Route path="/proyek/:projectId" element={<ProjectPage />}>
+            <Route index element={<Navigate to="impor" replace />} />
+            <Route path="impor" element={<ImportPage />} />
+            <Route path="deduplikasi" element={<DedupePage />} />
+            <Route path="bibliometrik" element={<BibliometricsPage />} />
+          </Route>
+          <Route path="/metodologi" element={<MethodologyPage />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </AppShell>
+    </HashRouter>
+  );
+}
