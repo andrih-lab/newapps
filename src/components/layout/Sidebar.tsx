@@ -8,6 +8,7 @@ const LINKS = [
   { to: 'skrining', label: 'Skrining' },
   { to: 'ekstraksi', label: 'Full Teks & Ekstraksi' },
   { to: 'prisma', label: 'PRISMA' },
+  { to: 'laporan', label: 'Draf Metode & Hasil' },
   { to: 'ekspor', label: 'Ekspor' },
 ];
 

@@ -4,8 +4,10 @@ Aplikasi web untuk membantu proses identifikasi, skrining, dan pelaporan
 Systematic Literature Review (SLR), sekaligus analisis bibliometrik. Seluruh
 pemrosesan berjalan di peramban (client-side), tanpa model bahasa.
 
-Status saat ini: **Pekan 1, 2 & 3** dari rencana empat pekan selesai (lihat
-`rancang-bangun-aplikasi-slr.md`, Bagian 7).
+Status saat ini: **Pekan 1, 2 & 3 selesai, plus Modul 7 & sebagian Modul 8
+dari Pekan 4** (lihat `rancang-bangun-aplikasi-slr.md`, Bagian 7). Yang
+tersisa dari Pekan 4: autentikasi/Supabase (Modul 9), halaman panduan,
+video demo.
 
 ## Yang sudah ada di Pekan 1 — fondasi & demo tercepat
 
@@ -61,6 +63,21 @@ Status saat ini: **Pekan 1, 2 & 3** dari rencana empat pekan selesai (lihat
   bagi diagram PRISMA (bukan lagi placeholder seperti di Pekan 2).
 - Ekspor matriks ekstraksi lengkap sebagai CSV.
 
+## Yang sudah ada dari Pekan 4 — Modul 7 & sebagian Modul 8
+
+- **Generator Bab Metode & Hasil (.docx)**, berbasis template, deterministik,
+  tanpa model bahasa — hanya menyusun kalimat dari data yang sudah tercatat
+  (pencarian, kriteria, hasil seleksi, matriks ekstraksi, ringkasan
+  bibliometrik). Halaman Draf Metode & Hasil menampilkan secara eksplisit —
+  di dalam aplikasi, bukan cuma di dalam file — bahwa Bab Pendahuluan,
+  Diskusi, dan Kesimpulan **sengaja tidak dibuat otomatis**, karena itu
+  kontribusi intelektual penulis dan berisiko fabrikasi bila diotomasi.
+- **Cadangan proyek sebagai JSON** (Modul 8): unduh seluruh data satu proyek
+  (record, kriteria, matriks ekstraksi, log keputusan) dari halaman Ekspor,
+  lalu pulihkan sebagai proyek baru dari halaman Proyek Saya — untuk cadangan
+  atau pindah perangkat/peramban. ID internal di-generate ulang saat
+  dipulihkan agar tidak bentrok dengan data yang sudah ada.
+
 Parsing berat (BibTeX/RIS/CSV), deduplikasi, dan pelatihan/skoring active
 learning berjalan di Web Worker agar UI tidak beku. Daftar record memakai
 virtualisasi agar tidak memuat ribuan baris sekaligus ke DOM.
@@ -106,3 +123,8 @@ perlu rewrite rule) dan tetap berfungsi walau diletakkan di subfolder.
   Bibliometrix/Biblioshiny dengan dataset yang sama sebelum rilis.
 - File `.env` tidak ikut ter-commit (lihat `.gitignore`); gunakan
   `.env.example` sebagai referensi.
+- Bundle JS utama sudah mencapai ~2 MB (util. ~640 KB gzip) karena semua
+  halaman (termasuk pdf.js, docx, Cytoscape, D3) masih dimuat dalam satu
+  chunk. Belum jadi masalah fungsional (tetap satu kali muat, ter-cache
+  sesudahnya), tapi code-splitting per rute (`React.lazy`) adalah kandidat
+  perbaikan berikutnya bila waktu muat awal jadi keluhan pengguna.

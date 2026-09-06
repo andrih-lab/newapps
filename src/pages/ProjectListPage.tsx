@@ -1,6 +1,7 @@
 import { useEffect, useState, type FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { createProject, listProjects } from '../db/repositories/projectRepo';
+import { importProjectBackup, isValidProjectBackup } from '../db/repositories/backupRepo';
 import type { Project } from '../types/project';
 import { Button } from '../components/common/Button';
 
@@ -9,6 +10,8 @@ export function ProjectListPage() {
   const [loading, setLoading] = useState(true);
   const [nama, setNama] = useState('');
   const [pertanyaan, setPertanyaan] = useState('');
+  const [importError, setImportError] = useState<string | null>(null);
+  const [importing, setImporting] = useState(false);
   const navigate = useNavigate();
 
   async function refresh() {
@@ -27,6 +30,25 @@ export function ProjectListPage() {
     setNama('');
     setPertanyaan('');
     navigate(`/proyek/${project.id}`);
+  }
+
+  async function handleImportBackup(file: File) {
+    setImportError(null);
+    setImporting(true);
+    try {
+      const text = await file.text();
+      const data = JSON.parse(text);
+      if (!isValidProjectBackup(data)) {
+        setImportError('File cadangan tidak valid atau dari versi aplikasi yang tidak kompatibel.');
+        return;
+      }
+      const project = await importProjectBackup(data);
+      navigate(`/proyek/${project.id}`);
+    } catch (err) {
+      setImportError(err instanceof Error ? err.message : 'Gagal membaca file cadangan.');
+    } finally {
+      setImporting(false);
+    }
   }
 
   return (
@@ -75,6 +97,29 @@ export function ProjectListPage() {
           </div>
           <Button type="submit">Buat Proyek</Button>
         </form>
+      </section>
+
+      <section className="rounded-md border border-gray-200 bg-white p-4">
+        <h2 className="mb-1 text-base font-semibold">Pulihkan dari Cadangan</h2>
+        <p className="mb-3 text-sm text-gray-600">
+          Unggah file JSON cadangan (dari halaman Ekspor proyek lain) untuk memulihkannya sebagai proyek baru —
+          berguna untuk pindah perangkat/peramban (Bagian 4, Modul 8).
+        </p>
+        <label className="inline-block cursor-pointer rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">
+          {importing ? 'Memulihkan...' : 'Pilih File Cadangan (.json)'}
+          <input
+            type="file"
+            accept="application/json"
+            className="hidden"
+            disabled={importing}
+            onChange={(e) => {
+              const f = e.target.files?.[0];
+              if (f) void handleImportBackup(f);
+              e.target.value = '';
+            }}
+          />
+        </label>
+        {importError && <p className="mt-2 text-sm text-red-600">{importError}</p>}
       </section>
     </div>
   );

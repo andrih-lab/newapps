@@ -10,6 +10,7 @@ import { CriteriaPage } from './pages/CriteriaPage';
 import { ScreeningPage } from './pages/ScreeningPage';
 import { ExtractionPage } from './pages/ExtractionPage';
 import { PrismaPage } from './pages/PrismaPage';
+import { ReportPage } from './pages/ReportPage';
 import { ExportPage } from './pages/ExportPage';
 import { MethodologyPage } from './pages/MethodologyPage';
 
@@ -29,6 +30,7 @@ export function AppRouter() {
             <Route path="skrining" element={<ScreeningPage />} />
             <Route path="ekstraksi" element={<ExtractionPage />} />
             <Route path="prisma" element={<PrismaPage />} />
+            <Route path="laporan" element={<ReportPage />} />
             <Route path="ekspor" element={<ExportPage />} />
           </Route>
           <Route path="/metodologi" element={<MethodologyPage />} />

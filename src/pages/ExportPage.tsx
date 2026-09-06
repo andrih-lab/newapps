@@ -3,6 +3,7 @@ import { useProjectContext } from '../hooks/useProjectContext';
 import { listRecordsByProject } from '../db/repositories/recordRepo';
 import { listScreeningLogsByRecordIds } from '../db/repositories/screeningLogRepo';
 import { listExtractionsByRecordIds } from '../db/repositories/extractionRepo';
+import { exportProjectBackup } from '../db/repositories/backupRepo';
 import { getMatrixColumns } from '../extraction/defaultColumns';
 import type { Extraction, RecordItem, ScreeningLog } from '../types/record';
 import { recordsToRis } from '../lib/exportRis';
@@ -69,6 +70,12 @@ export function ExportPage() {
     );
   }
 
+  async function handleExportBackup() {
+    const backup = await exportProjectBackup(project.id);
+    const safeName = project.nama.trim().replace(/[^a-z0-9]+/gi, '-').toLowerCase() || 'proyek';
+    downloadText(`cadangan-${safeName}.json`, 'application/json', JSON.stringify(backup, null, 2));
+  }
+
   function handleExportRecordsCsv() {
     const rows = records.map((r) => ({
       judul: r.judul,
@@ -128,6 +135,17 @@ export function ExportPage() {
           <Button variant="secondary" onClick={handleExportExtractionCsv} disabled={extractions.length === 0}>
             Unduh CSV
           </Button>
+        </div>
+      </section>
+
+      <section className="rounded-md border border-indigo-200 bg-indigo-50 p-4">
+        <h2 className="text-base font-semibold text-gray-900">Cadangan Proyek</h2>
+        <p className="mt-1 text-sm text-gray-600">
+          Seluruh data proyek ini (record, kriteria, matriks ekstraksi, log keputusan) sebagai satu file JSON —
+          untuk cadangan atau dipindahkan ke perangkat/peramban lain. Pulihkan lewat halaman "Proyek Saya".
+        </p>
+        <div className="mt-3">
+          <Button onClick={handleExportBackup}>Unduh Cadangan (JSON)</Button>
         </div>
       </section>
 
