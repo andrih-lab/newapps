@@ -1,5 +1,5 @@
 import { db } from '../db';
-import type { RecordItem, StatusDuplikat } from '../../types/record';
+import type { KeputusanSkrining, RecordItem, StatusDuplikat, StatusSkrining } from '../../types/record';
 
 export async function bulkAddRecords(records: RecordItem[]): Promise<void> {
   await db.record.bulkAdd(records);
@@ -46,4 +46,51 @@ export function listNonDuplicateRecords(projectId: string): Promise<RecordItem[]
 
 export async function deleteRecord(id: string): Promise<void> {
   await db.record.delete(id);
+}
+
+/** Record non-duplikat yang belum dinilai, diurutkan menurun berdasarkan skorRelevansi (Modul 4b/4c). */
+export async function getNextForScreening(projectId: string): Promise<RecordItem | undefined> {
+  const belum = await db.record
+    .where('projectId')
+    .equals(projectId)
+    .filter((r) => r.statusDuplikat !== 'duplikat' && r.statusSkrining === 'belum')
+    .toArray();
+  belum.sort((a, b) => (b.skorRelevansi ?? -Infinity) - (a.skorRelevansi ?? -Infinity));
+  return belum[0];
+}
+
+export async function bulkSetSkorRelevansi(scores: Map<string, number>): Promise<void> {
+  await db.transaction('rw', db.record, async () => {
+    for (const [id, skor] of scores) {
+      await db.record.update(id, { skorRelevansi: skor });
+    }
+  });
+}
+
+const keputusanToStatus: Record<KeputusanSkrining, StatusSkrining> = {
+  masuk: 'termasuk',
+  tolak: 'dikecualikan',
+  ragu: 'ragu',
+};
+
+export async function setScreeningDecision(
+  id: string,
+  keputusan: KeputusanSkrining,
+  labelEksklusi: string | null,
+  penilai: string | null,
+): Promise<void> {
+  await db.record.update(id, {
+    statusSkrining: keputusanToStatus[keputusan],
+    labelEksklusi: keputusan === 'tolak' ? labelEksklusi : null,
+    tanggalKeputusan: new Date().toISOString(),
+    penilai,
+  });
+}
+
+export async function resetScreeningDecision(id: string): Promise<void> {
+  await db.record.update(id, {
+    statusSkrining: 'belum',
+    labelEksklusi: null,
+    tanggalKeputusan: null,
+  });
 }

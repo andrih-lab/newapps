@@ -4,6 +4,10 @@ const LINKS = [
   { to: 'impor', label: 'Impor Data' },
   { to: 'deduplikasi', label: 'Deduplikasi' },
   { to: 'bibliometrik', label: 'Bibliometrik' },
+  { to: 'kriteria', label: 'Kriteria' },
+  { to: 'skrining', label: 'Skrining' },
+  { to: 'prisma', label: 'PRISMA' },
+  { to: 'ekspor', label: 'Ekspor' },
 ];
 
 export function Sidebar() {

@@ -11,6 +11,15 @@ function serializeSvg(svg: SVGSVGElement): string {
   return new XMLSerializer().serializeToString(clone);
 }
 
+function loadImage(url: string): Promise<HTMLImageElement> {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => resolve(img);
+    img.onerror = () => reject(new Error('Gagal memuat SVG sebagai gambar'));
+    img.src = url;
+  });
+}
+
 /** Unduh elemen <svg> sebagai file .svg. */
 export function downloadSvg(filename: string, svg: SVGSVGElement): void {
   const source = serializeSvg(svg);
@@ -18,13 +27,24 @@ export function downloadSvg(filename: string, svg: SVGSVGElement): void {
   downloadBlob(filename, blob);
 }
 
-/** Render elemen <svg> ke kanvas lalu unduh sebagai PNG (skala 2x agar tajam). */
-export async function downloadPng(filename: string, svg: SVGSVGElement, scale = 2): Promise<void> {
-  const source = serializeSvg(svg);
+export interface RasterizedSvg {
+  canvas: HTMLCanvasElement;
+  dataUrl: string;
+  width: number;
+  height: number;
+}
+
+/**
+ * Render elemen <svg> ke <canvas> (skala 2x agar tajam secara bawaan).
+ * Dipakai bersama oleh downloadPng (lib ini) dan downloadSvgAsPdf (lib/exportPdf.ts)
+ * agar logika rasterisasi tidak diduplikasi.
+ */
+export async function rasterizeSvg(svg: SVGSVGElement, scale = 2): Promise<RasterizedSvg> {
   const bbox = svg.getBoundingClientRect();
   const width = Math.max(1, Math.ceil(bbox.width));
   const height = Math.max(1, Math.ceil(bbox.height));
 
+  const source = serializeSvg(svg);
   const svgBlob = new Blob([source], { type: 'image/svg+xml;charset=utf-8' });
   const url = URL.createObjectURL(svgBlob);
 
@@ -39,20 +59,16 @@ export async function downloadPng(filename: string, svg: SVGSVGElement, scale = 
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.scale(scale, scale);
     ctx.drawImage(img, 0, 0, width, height);
-
-    const blob: Blob | null = await new Promise((resolve) => canvas.toBlob(resolve, 'image/png'));
-    if (!blob) throw new Error('Gagal membuat PNG dari kanvas');
-    downloadBlob(filename, blob);
+    return { canvas, dataUrl: canvas.toDataURL('image/png'), width, height };
   } finally {
     URL.revokeObjectURL(url);
   }
 }
 
-function loadImage(url: string): Promise<HTMLImageElement> {
-  return new Promise((resolve, reject) => {
-    const img = new Image();
-    img.onload = () => resolve(img);
-    img.onerror = () => reject(new Error('Gagal memuat SVG sebagai gambar'));
-    img.src = url;
-  });
+/** Render elemen <svg> ke kanvas lalu unduh sebagai PNG. */
+export async function downloadPng(filename: string, svg: SVGSVGElement, scale = 2): Promise<void> {
+  const { canvas } = await rasterizeSvg(svg, scale);
+  const blob: Blob | null = await new Promise((resolve) => canvas.toBlob(resolve, 'image/png'));
+  if (!blob) throw new Error('Gagal membuat PNG dari kanvas');
+  downloadBlob(filename, blob);
 }

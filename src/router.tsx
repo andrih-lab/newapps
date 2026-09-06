@@ -6,6 +6,10 @@ import { ProjectPage } from './pages/ProjectPage';
 import { ImportPage } from './pages/ImportPage';
 import { DedupePage } from './pages/DedupePage';
 import { BibliometricsPage } from './pages/BibliometricsPage';
+import { CriteriaPage } from './pages/CriteriaPage';
+import { ScreeningPage } from './pages/ScreeningPage';
+import { PrismaPage } from './pages/PrismaPage';
+import { ExportPage } from './pages/ExportPage';
 import { MethodologyPage } from './pages/MethodologyPage';
 
 export function AppRouter() {
@@ -20,6 +24,10 @@ export function AppRouter() {
             <Route path="impor" element={<ImportPage />} />
             <Route path="deduplikasi" element={<DedupePage />} />
             <Route path="bibliometrik" element={<BibliometricsPage />} />
+            <Route path="kriteria" element={<CriteriaPage />} />
+            <Route path="skrining" element={<ScreeningPage />} />
+            <Route path="prisma" element={<PrismaPage />} />
+            <Route path="ekspor" element={<ExportPage />} />
           </Route>
           <Route path="/metodologi" element={<MethodologyPage />} />
           <Route path="*" element={<Navigate to="/" replace />} />

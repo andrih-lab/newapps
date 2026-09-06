@@ -102,6 +102,60 @@ export function MethodologyPage() {
       </section>
 
       <section>
+        <h2 className="text-base font-semibold text-gray-900">Active Learning untuk Skrining</h2>
+        <p className="mt-1">
+          Meniru pendekatan ASReview, tanpa model bahasa apa pun. Judul + abstrak divektorisasi lalu
+          diberi skor relevansi yang menentukan urutan artikel berikutnya yang ditampilkan ke pengguna.
+        </p>
+
+        <h3 className="mt-3 font-medium text-gray-900">Fase awal (sebelum ~25 keputusan)</h3>
+        <p className="mt-1">
+          Separuh antrean disusun dari kemiripan TF-IDF (cosine similarity) antara setiap dokumen dan
+          teks gabungan pertanyaan penelitian + kriteria inklusi; separuh lagi disusun acak (memakai hash
+          stabil dari id record, bukan <code className="rounded bg-gray-100 px-1">Math.random()</code>,
+          agar urutan tetap sama walau halaman dimuat ulang). Bobot IDF memakai varian ternormalisasi ala
+          scikit-learn:
+        </p>
+        <Formula>idf(t) = ln((N + 1) / (df(t) + 1)) + 1</Formula>
+        <p>dengan N = jumlah dokumen, df(t) = jumlah dokumen yang memuat term t.</p>
+
+        <h3 className="mt-3 font-medium text-gray-900">Fase active learning (setelah ~25 keputusan)</h3>
+        <p className="mt-1">
+          Naive Bayes multinomial (bag-of-words) dilatih ulang dari seluruh keputusan "masuk"/"tolak"
+          setiap kali pengguna memberi keputusan baru (keputusan "ragu" tidak dipakai untuk melatih):
+        </p>
+        <Formula>P(term | kelas) = (jumlah_kemunculan_term_di_kelas + α) / (total_token_di_kelas + α · |vocab|)</Formula>
+        <p>
+          dengan α = 1 (Laplace smoothing, mencegah probabilitas nol). Sisa korpus diurutkan menurun
+          berdasarkan probabilitas relevan hasil model ini. Term yang tak pernah muncul di data latih
+          dilewati saat prediksi.
+        </p>
+        <p className="mt-2">
+          Indikator berhenti yang ditampilkan: jumlah penolakan beruntun, dan kurva penemuan relevan
+          (jumlah kumulatif "masuk" dibanding jumlah artikel yang sudah dinilai).
+        </p>
+        <Ref>
+          Referensi: van de Schoot, R. et al. (2021). "An open source machine learning framework for
+          efficient and transparent systematic reviews" (ASReview), Nature Machine Intelligence.
+        </Ref>
+      </section>
+
+      <section>
+        <h2 className="text-base font-semibold text-gray-900">Diagram PRISMA</h2>
+        <p className="mt-1">
+          Setiap kotak dihitung langsung dari data proyek (identifikasi per sumber, duplikat dibuang,
+          disaring, dieksklusi saat skrining abstrak beserta rinciannya per label). Tahap "dinilai
+          kelayakan full teks" dan "dieksklusi full teks" masih placeholder karena Modul 5 (unggah &amp;
+          baca PDF) belum dikerjakan — nilainya sementara disamakan dengan hasil skrining abstrak dan
+          ditandai eksplisit di halaman PRISMA, bukan disembunyikan.
+        </p>
+        <Ref>
+          Referensi: Page, M. J. et al. (2021). "The PRISMA 2020 statement: an updated guideline for
+          reporting systematic reviews." BMJ.
+        </Ref>
+      </section>
+
+      <section>
         <h2 className="text-base font-semibold text-gray-900">Verifikasi</h2>
         <p className="mt-1">
           Keluaran Hukum Lotka dan Bradford wajib dibandingkan dengan Bibliometrix/Biblioshiny memakai
