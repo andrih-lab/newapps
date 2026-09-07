@@ -4,10 +4,11 @@ Aplikasi web untuk membantu proses identifikasi, skrining, dan pelaporan
 Systematic Literature Review (SLR), sekaligus analisis bibliometrik. Seluruh
 pemrosesan berjalan di peramban (client-side), tanpa model bahasa.
 
-Status saat ini: **Pekan 1, 2 & 3 selesai, plus Modul 7 & sebagian Modul 8
-dari Pekan 4** (lihat `rancang-bangun-aplikasi-slr.md`, Bagian 7). Yang
-tersisa dari Pekan 4: autentikasi/Supabase (Modul 9), halaman panduan,
-video demo.
+Status saat ini: **Pekan 1, 2 & 3 selesai, plus Modul 7, Modul 8, dan
+halaman panduan dari Pekan 4** (lihat `rancang-bangun-aplikasi-slr.md`,
+Bagian 7). Yang tersisa dari Pekan 4: autentikasi/langganan (Modul 9 —
+menunggu kredensial Supabase & Midtrans dari pemilik proyek) dan video
+demo.
 
 ## Yang sudah ada di Pekan 1 — fondasi & demo tercepat
 
@@ -63,7 +64,7 @@ video demo.
   bagi diagram PRISMA (bukan lagi placeholder seperti di Pekan 2).
 - Ekspor matriks ekstraksi lengkap sebagai CSV.
 
-## Yang sudah ada dari Pekan 4 — Modul 7 & sebagian Modul 8
+## Yang sudah ada dari Pekan 4 — Modul 7, Modul 8 & Panduan
 
 - **Generator Bab Metode & Hasil (.docx)**, berbasis template, deterministik,
   tanpa model bahasa — hanya menyusun kalimat dari data yang sudah tercatat
@@ -77,6 +78,14 @@ video demo.
   lalu pulihkan sebagai proyek baru dari halaman Proyek Saya — untuk cadangan
   atau pindah perangkat/peramban. ID internal di-generate ulang saat
   dipulihkan agar tidak bentrok dengan data yang sudah ada.
+- **Halaman Panduan** (`/panduan`): ringkasan langkah pakai tiap modul secara
+  berurutan, dari buat proyek sampai ekspor draf Word.
+- **Halaman Troubleshooting terpisah** (`/panduan/troubleshooting`): basis
+  pengetahuan mandiri (self-service) berisi ~25 masalah paling umum
+  (data hilang, impor gagal, PDF tidak muncul lagi, cadangan gagal dipulihkan,
+  deploy blank, dll.) dengan jawaban langsung, dikelompokkan per kategori dan
+  bisa dicari dengan kata kunci — dirancang supaya pengguna bisa memecahkan
+  masalah sendiri tanpa perlu bertanya ke pengembang.
 
 Parsing berat (BibTeX/RIS/CSV), deduplikasi, dan pelatihan/skoring active
 learning berjalan di Web Worker agar UI tidak beku. Daftar record memakai

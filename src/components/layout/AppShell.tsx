@@ -13,6 +13,9 @@ export function AppShell({ children }: { children: ReactNode }) {
             <Link to="/proyek" className="text-gray-600 hover:text-indigo-700">
               Proyek Saya
             </Link>
+            <Link to="/panduan" className="text-gray-600 hover:text-indigo-700">
+              Panduan
+            </Link>
             <Link to="/metodologi" className="text-gray-600 hover:text-indigo-700">
               Metodologi
             </Link>

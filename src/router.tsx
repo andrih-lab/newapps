@@ -13,6 +13,8 @@ import { PrismaPage } from './pages/PrismaPage';
 import { ReportPage } from './pages/ReportPage';
 import { ExportPage } from './pages/ExportPage';
 import { MethodologyPage } from './pages/MethodologyPage';
+import { GuidePage } from './pages/GuidePage';
+import { TroubleshootingPage } from './pages/TroubleshootingPage';
 
 export function AppRouter() {
   return (
@@ -34,6 +36,8 @@ export function AppRouter() {
             <Route path="ekspor" element={<ExportPage />} />
           </Route>
           <Route path="/metodologi" element={<MethodologyPage />} />
+          <Route path="/panduan" element={<GuidePage />} />
+          <Route path="/panduan/troubleshooting" element={<TroubleshootingPage />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </AppShell>
