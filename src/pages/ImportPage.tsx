@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { useProjectContext } from '../hooks/useProjectContext';
 import { FileDropzone } from '../components/import/FileDropzone';
 import { ColumnMappingDialog } from '../components/import/ColumnMappingDialog';
@@ -35,6 +36,13 @@ export function ImportPage() {
   const [pendingCsv, setPendingCsv] = useState<PendingCsv | null>(null);
   const [records, setRecords] = useState<RecordItem[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const location = useLocation();
+  const queryAwal = (location.state as { openAlexQuery?: string } | null)?.openAlexQuery;
+  const openAlexRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    if (queryAwal) openAlexRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, [queryAwal]);
 
   async function refresh() {
     setRecords(await listRecordsByProject(project.id));
@@ -98,11 +106,31 @@ export function ImportPage() {
         </div>
         {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
         <p className="mt-2 text-sm text-gray-500">Total record di proyek ini: {records.length}</p>
+        <details className="mt-3 rounded-md border border-gray-200 bg-white p-3 text-sm text-gray-600">
+          <summary className="cursor-pointer font-medium text-gray-700">Cara ekspor dari Scopus / Web of Science agar abstrak ikut</summary>
+          <ul className="mt-2 list-disc space-y-1 pl-5">
+            <li>
+              <strong>Scopus</strong>: pilih semua hasil → Export → format <em>CSV</em> atau <em>BibTeX</em> → centang grup{' '}
+              <em>Citation information</em>, <em>Bibliographical information</em>, dan <em>Abstract &amp; keywords</em>.
+            </li>
+            <li>
+              <strong>Web of Science</strong>: Export → <em>BibTeX</em> atau <em>Tab delimited file</em> → Record Content:{' '}
+              <em>Full Record</em> (maks. 500–1000 record per ekspor; ulangi per rentang lalu unggah semuanya di sini).
+            </li>
+            <li>
+              Belum punya string pencariannya? Susun dulu di{' '}
+              <Link to="../kata-kunci" className="text-indigo-600 underline">
+                Kata Kunci
+              </Link>
+              .
+            </li>
+          </ul>
+        </details>
       </section>
 
       {logs.length > 0 && <ImportProgress logs={logs} />}
 
-      <section>
+      <section ref={openAlexRef}>
         <h2 className="text-lg font-semibold">Cari di OpenAlex</h2>
         <p className="mt-1 text-sm text-gray-600">
           Pencarian dipanggil langsung dari peramban ke OpenAlex (tanpa proxy untuk saat ini). Isi{' '}
@@ -112,7 +140,9 @@ export function ImportPage() {
         </p>
         <div className="mt-3">
           <OpenAlexSearchForm
+            key={queryAwal ?? ''}
             projectId={project.id}
+            initialQuery={queryAwal}
             onImported={async (summary) => {
               setLogs((prev) => [{ filename: `Pencarian OpenAlex`, summary }, ...prev]);
               await refresh();

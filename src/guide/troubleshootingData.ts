@@ -10,6 +10,44 @@ export interface FaqItem {
  * pengguna bisa memecahkan masalah sendiri tanpa perlu bertanya ke pengembang.
  */
 export const FAQ_ITEMS: FaqItem[] = [
+  // --- Kata Kunci ---
+  {
+    id: 'kata-kunci-kuota',
+    kategori: 'Kata Kunci',
+    pertanyaan: 'Muncul pesan "Kuota harian OpenAlex habis"',
+    jawaban: [
+      'Sejak 2026 OpenAlex memberi kuota harian berbasis biaya: tiap pencarian ±$0,001, tanpa API key batasnya ±$0,10 per hari (±100 pencarian). Sisa kuota tampil di pojok kanan atas halaman Kata Kunci.',
+      'Yang paling boros adalah "Hitung hit" (1 pencarian per istilah) dan impor ribuan record. Tunggu reset (±24 jam), atau buat API key gratis di openalex.org lalu isi VITE_OPENALEX_API_KEY di file .env dan build ulang.',
+    ],
+  },
+  {
+    id: 'kata-kunci-agrovoc-kosong',
+    kategori: 'Kata Kunci',
+    pertanyaan: 'Konsep saya tidak mendapat sinonim AGROVOC',
+    jawaban: [
+      'AGROVOC adalah tesaurus pertanian, perikanan, kehutanan, dan lingkungan. Istilah sosial atau metodologis (mis. "local ecological knowledge") sering tidak ada di sana — itu normal, bukan error.',
+      'Andalkan "Saran dari literatur" (hasil penambangan OpenAlex), tambahkan istilah sendiri, atau aktifkan Saran AI. Menulis konsep dalam bentuk yang lebih umum (mis. "blue carbon" alih-alih "blue carbon stocks") juga membantu.',
+    ],
+  },
+  {
+    id: 'kata-kunci-recall-rendah',
+    kategori: 'Kata Kunci',
+    pertanyaan: 'Uji paper kunci hanya menjaring sedikit artikel',
+    jawaban: [
+      'Buka kotak "Terlewat" — di sana tampil kata kunci artikel yang tidak terjaring. Klik kata kunci yang relevan untuk memasukkannya ke konsep yang tepat, lalu uji lagi.',
+      'Penyebab umum: satu konsep terlalu sempit (hanya 1–2 istilah), atau paper kunci memakai istilah lain untuk konsep yang sama. Konsep wilayah juga sering jadi penyebab — artikel global tidak menyebut negara di abstraknya; pertimbangkan menghapus blok wilayah dan menyaringnya saat skrining.',
+    ],
+  },
+  {
+    id: 'kata-kunci-wildcard',
+    kategori: 'Kata Kunci',
+    pertanyaan: 'Tanda * (wildcard) hilang dari string OpenAlex',
+    jawaban: [
+      'OpenAlex tidak mendukung wildcard — permintaan dengan * akan gagal, jadi Telaah menghapusnya otomatis. OpenAlex sudah melakukan stemming (mangrove = mangroves).',
+      'Di string Scopus dan Web of Science, tanda * tetap dipertahankan.',
+    ],
+  },
+
   // --- Umum & Penyimpanan Data ---
   {
     id: 'umum-data-hilang',

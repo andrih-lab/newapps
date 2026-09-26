@@ -6,6 +6,8 @@ import type { OpenAlexProgress } from '../../services/openalex';
 
 interface Props {
   projectId: string;
+  /** String awal, mis. dari Perancang Kata Kunci. */
+  initialQuery?: string;
   onImported: (summary: ImportSummary) => void;
 }
 
@@ -23,8 +25,8 @@ const BAHASA_OPTIONS = [
   { value: 'id', label: 'Indonesia' },
 ];
 
-export function OpenAlexSearchForm({ projectId, onImported }: Props) {
-  const [query, setQuery] = useState('');
+export function OpenAlexSearchForm({ projectId, initialQuery, onImported }: Props) {
+  const [query, setQuery] = useState(initialQuery ?? '');
   const [tahunMulai, setTahunMulai] = useState('');
   const [tahunAkhir, setTahunAkhir] = useState('');
   const [jenisDokumen, setJenisDokumen] = useState<string[]>([]);

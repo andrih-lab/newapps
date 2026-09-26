@@ -1,3 +1,4 @@
+import { lazy, Suspense } from 'react';
 import { HashRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { AppShell } from './components/layout/AppShell';
 import { HomePage } from './pages/HomePage';
@@ -16,6 +17,12 @@ import { MethodologyPage } from './pages/MethodologyPage';
 import { GuidePage } from './pages/GuidePage';
 import { TroubleshootingPage } from './pages/TroubleshootingPage';
 
+// Dimuat terpisah (chunk sendiri) agar bundle utama tidak bertambah berat.
+const KeywordBuilderPage = lazy(() =>
+  import('./pages/KeywordBuilderPage').then((m) => ({ default: m.KeywordBuilderPage })),
+);
+const ContentPackPage = lazy(() => import('./pages/ContentPackPage').then((m) => ({ default: m.ContentPackPage })));
+
 export function AppRouter() {
   return (
     <HashRouter>
@@ -24,7 +31,15 @@ export function AppRouter() {
           <Route path="/" element={<HomePage />} />
           <Route path="/proyek" element={<ProjectListPage />} />
           <Route path="/proyek/:projectId" element={<ProjectPage />}>
-            <Route index element={<Navigate to="impor" replace />} />
+            <Route index element={<Navigate to="kata-kunci" replace />} />
+            <Route
+              path="kata-kunci"
+              element={
+                <Suspense fallback={<p className="text-sm text-gray-500">Memuat…</p>}>
+                  <KeywordBuilderPage />
+                </Suspense>
+              }
+            />
             <Route path="impor" element={<ImportPage />} />
             <Route path="deduplikasi" element={<DedupePage />} />
             <Route path="bibliometrik" element={<BibliometricsPage />} />
@@ -33,6 +48,14 @@ export function AppRouter() {
             <Route path="ekstraksi" element={<ExtractionPage />} />
             <Route path="prisma" element={<PrismaPage />} />
             <Route path="laporan" element={<ReportPage />} />
+            <Route
+              path="konten"
+              element={
+                <Suspense fallback={<p className="text-sm text-gray-500">Memuat…</p>}>
+                  <ContentPackPage />
+                </Suspense>
+              }
+            />
             <Route path="ekspor" element={<ExportPage />} />
           </Route>
           <Route path="/metodologi" element={<MethodologyPage />} />

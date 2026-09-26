@@ -1,3 +1,5 @@
+import type { StrategiPencarian } from './keywords';
+
 /** Definisi satu kolom matriks ekstraksi (Bagian 4, Modul 5 — "kolom dapat dikustomisasi"). */
 export interface MatrixColumnDef {
   key: string;
@@ -16,6 +18,8 @@ export interface Project {
   dibuat: string; // ISO datetime
   diubah: string; // ISO datetime
   kolomEkstraksi?: MatrixColumnDef[];
+  /** Hasil Perancang Kata Kunci (di luar Bagian 5, opsional — proyek lama tidak memilikinya). */
+  strategiPencarian?: StrategiPencarian;
 }
 
 /** Sumber data yang bisa dipakai untuk pencarian atau asal impor. */

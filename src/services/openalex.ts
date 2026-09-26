@@ -38,13 +38,16 @@ function buildUrl(query: string, filter: string, perPage: number, cursor: string
   if (filter) url.searchParams.set('filter', filter);
   url.searchParams.set('per-page', String(perPage));
   url.searchParams.set('cursor', cursor);
+  applyOpenAlexAuth(url);
+  return url.toString();
+}
 
+/** Tambahkan api_key/mailto dari .env ke URL OpenAlex (dipakai juga oleh Perancang Kata Kunci). */
+export function applyOpenAlexAuth(url: URL): void {
   const apiKey = import.meta.env.VITE_OPENALEX_API_KEY;
   const mailto = import.meta.env.VITE_OPENALEX_MAILTO;
   if (apiKey) url.searchParams.set('api_key', apiKey);
   if (mailto) url.searchParams.set('mailto', mailto);
-
-  return url.toString();
 }
 
 async function safeErrorText(res: Response): Promise<string> {

@@ -2,6 +2,65 @@ import { Paragraph } from 'docx';
 import type { ReportData } from './gatherReportData';
 import type { SumberData, FilterPencarian } from '../types/project';
 import { h1, h2, p, pBold, bullet, formatTanggal } from './reportHelpers';
+import type { StrategiPencarian } from '../types/keywords';
+import { blokAktif, susunSemuaString } from '../keywords/buildQueries';
+
+/**
+ * Paragraf strategi pencarian dari Perancang Kata Kunci (PRISMA-S): konsep,
+ * istilah per konsep, asal istilah, string per basis data, dan uji recall.
+ * Istilah dari saran AI diungkapkan secara eksplisit bila ada yang dipakai.
+ */
+function paragrafStrategi(st: StrategiPencarian): Paragraph[] {
+  const aktif = blokAktif(st.blok);
+  if (aktif.length === 0) return [];
+  const out: Paragraph[] = [];
+  const dipakai = st.blok.flatMap((b) => b.istilah.filter((i) => i.dipilih));
+  const sumber = new Set(dipakai.map((i) => i.sumber));
+
+  const asal: string[] = [];
+  if (sumber.has('agrovoc')) asal.push('tesaurus AGROVOC (FAO)');
+  if (sumber.has('varian')) asal.push('varian ejaan dan singkatan baku');
+  if (sumber.has('wilayah')) asal.push('perluasan nama kawasan ke negara/pulau penyusunnya');
+  if (sumber.has('openalex')) {
+    asal.push(
+      `istilah yang sering muncul pada ${st.jumlahSampelTambang ?? 'sejumlah'} artikel OpenAlex paling relevan (frekuensi dokumen pada judul, abstrak, dan kata kunci)`,
+    );
+  }
+  if (sumber.has('paper-kunci')) asal.push('kata kunci paper kunci yang belum terjaring');
+  if (sumber.has('ai')) asal.push('usulan model bahasa (Gemini) yang ditinjau dan dipilih manual oleh penulis');
+
+  out.push(
+    p(
+      `Strategi pencarian disusun dengan pendekatan blok konsep: ${aktif.length} konsep ` +
+        `(${aktif.map((b) => b.nama).join('; ')}) digabung dengan operator AND, dan sinonim dalam tiap konsep ` +
+        `digabung dengan OR. Istilah awal diturunkan dari topik penelitian` +
+        (asal.length > 0 ? `, lalu diperluas menggunakan ${asal.join(', ')}.` : '.') +
+        ' Setiap istilah hasil perluasan ditinjau manual sebelum dimasukkan.',
+    ),
+  );
+  for (const b of aktif) out.push(bullet(`${b.nama}: ${b.istilah.join('; ')}`));
+
+  const strings = susunSemuaString(st.blok).filter((x) => x.basisData === 'scopus' || x.basisData === 'wos');
+  if (strings.length > 0) {
+    out.push(pBold('String pencarian per basis data:'));
+    for (const x of strings) out.push(bullet(`${x.label}: ${x.string}`));
+  }
+
+  const r = st.ujiRecall;
+  if (r) {
+    const diuji = r.totalDoi - r.tidakTerindeks.length;
+    if (diuji > 0) {
+      out.push(
+        p(
+          `Sensitivitas strategi divalidasi pada ${formatTanggal(r.tanggal)} dengan ${diuji} artikel kunci yang diketahui ` +
+            `relevan: string OpenAlex menjaring ${r.ditemukan.length} di antaranya ` +
+            `(${Math.round((r.ditemukan.length / diuji) * 100)}%).`,
+        ),
+      );
+    }
+  }
+  return out;
+}
 
 const SUMBER_LABEL: Record<SumberData, string> = {
   openalex: 'OpenAlex',
@@ -50,6 +109,7 @@ export function buildMethodsSection(data: ReportData): Paragraph[] {
   }
 
   out.push(h2('Sumber Data dan Strategi Pencarian'));
+  if (data.project.strategiPencarian) out.push(...paragrafStrategi(data.project.strategiPencarian));
   if (data.searchQueries.length === 0) {
     out.push(p('Tidak ada pencarian basis data terintegrasi yang tercatat pada proyek ini.'));
   }
