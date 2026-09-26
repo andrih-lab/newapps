@@ -15,7 +15,7 @@ import { Button } from '../components/common/Button';
 
 const DESKRIPSI_TUJUAN: Record<TujuanKonten, string> = {
   artikel: 'Kerangka, tabel sintesis tema, draf Hasil, poin argumen Diskusi, dan celah penelitian.',
-  blog: '1.200–1.800 kata, bahasa populer, judul & meta description, daftar pustaka ber-DOI.',
+  blog: 'Kerangka TANYA: 800–1.200 kata, satu pertanyaan, jawaban di depan, tautan DOI, nuansa, ajakan + catatan penyunting.',
   video: 'Naskah 8–10 menit dalam tabel Waktu | Narasi | Visual, plus judul, thumbnail, deskripsi.',
 };
 
