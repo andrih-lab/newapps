@@ -21,6 +21,7 @@ import { TroubleshootingPage } from './pages/TroubleshootingPage';
 const KeywordBuilderPage = lazy(() =>
   import('./pages/KeywordBuilderPage').then((m) => ({ default: m.KeywordBuilderPage })),
 );
+const ContentPackPage = lazy(() => import('./pages/ContentPackPage').then((m) => ({ default: m.ContentPackPage })));
 
 export function AppRouter() {
   return (
@@ -47,6 +48,14 @@ export function AppRouter() {
             <Route path="ekstraksi" element={<ExtractionPage />} />
             <Route path="prisma" element={<PrismaPage />} />
             <Route path="laporan" element={<ReportPage />} />
+            <Route
+              path="konten"
+              element={
+                <Suspense fallback={<p className="text-sm text-gray-500">Memuat…</p>}>
+                  <ContentPackPage />
+                </Suspense>
+              }
+            />
             <Route path="ekspor" element={<ExportPage />} />
           </Route>
           <Route path="/metodologi" element={<MethodologyPage />} />

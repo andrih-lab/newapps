@@ -123,7 +123,16 @@ export function GuidePage() {
           </p>
         </Step>
 
-        <Step title="11. Ekspor & Cadangan">
+        <Step title="11. Paket Konten (artikel, blog, video)">
+          <p>
+            Pilih tujuan (artikel ilmiah, blog, atau naskah video YouTube) dan bahasa, lalu klik{' '}
+            <strong>Unduh Paket</strong>. File .md berisi temuan bibliometrik, bukti per studi bernomor [n], daftar
+            pustaka ber-DOI, dan instruksi untuk asisten AI. Unggah ke Claude (atau AI lain) dan minta{' '}
+            <em>“Ikuti instruksi di Bagian 1.”</em> Telaah sendiri tidak mengirim data ke AI mana pun.
+          </p>
+        </Step>
+
+        <Step title="12. Ekspor & Cadangan">
           <p>
             Di halaman Ekspor: unduh artikel terpilih (RIS/BibTeX), log keputusan (CSV), matriks ekstraksi
             (CSV), seluruh record (CSV), dan yang terpenting —{' '}

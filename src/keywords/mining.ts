@@ -32,7 +32,9 @@ const KATA_KUNCI_UMUM = new Set(
     'chemistry', 'physics', 'mathematics', 'geology', 'psychology', 'oceanography', 'fishery',
     'environmental resource management', 'environmental protection', 'environmental planning',
     'botany', 'zoology', 'agronomy', 'soil science', 'hydrology', 'law', 'history', 'philosophy',
-    'art', 'materials science', 'carbon fibers', 'global warming', 'tropics', 'latitude', 'archaeology', 'biochemistry', 'physical geography',
+    'art', 'materials science', 'carbon fibers', 'global warming', 'tropics', 'latitude',
+    'corporate governance', 'the internet', 'world wide web', 'internet privacy', 'computer security', 'finance',
+    'psychological resilience', 'citizen journalism', 'marketing', 'management', 'operations management', 'public relations', 'knowledge management', 'accounting', 'archaeology', 'biochemistry', 'physical geography',
     'natural resource economics', 'socioeconomics', 'geomorphology', 'remote sensing', 'cartography',
   ].map((k) => kunciStem(k)),
 );

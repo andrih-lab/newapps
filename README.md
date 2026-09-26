@@ -10,6 +10,19 @@ panduan dari Pekan 4, dan Perancang Kata Kunci** (lihat
 `rancang-bangun-aplikasi-slr.md`, Bagian 7). Modul 9 (akun & langganan)
 **ditunda**: aplikasi saat ini dipakai pribadi oleh pemiliknya.
 
+## Paket Konten (artikel, blog, video)
+
+Halaman **Paket Konten** menyusun satu file Markdown dari data proyek untuk
+dibawa ke asisten AI pilihan pengguna: instruksi sesuai tujuan (artikel
+ilmiah / blog populer / naskah video YouTube faceless) dan bahasa, konteks &
+alur PRISMA, temuan bibliometrik (produksi tahunan, negara/jurnal/penulis
+teratas, kata kunci terbanyak & yang proporsinya naik 3 tahun terakhir,
+paling disitasi), bukti per studi bernomor [n] (matriks ekstraksi, kutipan
+verbatim + halaman, abstrak), daftar pustaka ber-DOI, dan keterbatasan data.
+Instruksi mewajibkan AI hanya memakai isi paket, memberi rujukan [n], dan
+menulis [perlu dicek] bila bukti tidak cukup. Telaah tidak memanggil AI di
+sini; seluruh isi disusun deterministik.
+
 ## Perancang Kata Kunci (halaman pertama tiap proyek)
 
 Alur sekali klik dari topik ke string pencarian yang siap dipakai:
