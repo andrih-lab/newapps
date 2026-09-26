@@ -41,7 +41,17 @@ export function GuidePage() {
           </p>
         </Step>
 
-        <Step title="2. Impor Data">
+        <Step title="2. Susun Kata Kunci">
+          <p>
+            Di halaman <strong>Kata Kunci</strong>, tulis topik (bahasa Inggris), lalu klik{' '}
+            <strong>Buat Kata Kunci Otomatis</strong>. Topik dipecah menjadi konsep, lalu tiap konsep diperluas dari
+            tesaurus AGROVOC, varian ejaan/singkatan, daftar negara untuk nama kawasan, dan istilah yang sering
+            muncul di literatur OpenAlex. Hilangkan centang istilah yang tidak cocok, salin string untuk Scopus/WoS/
+            Scholar, dan (disarankan) uji string dengan 5–10 DOI paper kunci.
+          </p>
+        </Step>
+
+        <Step title="3. Impor Data">
           <p>Ada dua jalur, bisa dipakai bergantian dalam satu proyek:</p>
           <ul className="ml-4 list-disc space-y-1">
             <li>
@@ -55,7 +65,7 @@ export function GuidePage() {
           </ul>
         </Step>
 
-        <Step title="3. Deduplikasi">
+        <Step title="4. Deduplikasi">
           <p>
             Di halaman Deduplikasi, klik <strong>Jalankan Deduplikasi</strong>. Kecocokan DOI ditandai
             otomatis; kandidat berdasarkan kemiripan judul akan muncul untuk Anda tinjau dan putuskan
@@ -63,7 +73,7 @@ export function GuidePage() {
           </p>
         </Step>
 
-        <Step title="4. Bibliometrik (bisa kapan saja)">
+        <Step title="5. Bibliometrik (bisa kapan saja)">
           <p>
             Begitu ada data, halaman Bibliometrik langsung menampilkan produksi tahunan, penulis/jurnal/negara
             paling produktif, Hukum Lotka, Hukum Bradford, jaringan co-word &amp; co-authorship, dan tren kata
@@ -71,14 +81,14 @@ export function GuidePage() {
           </p>
         </Step>
 
-        <Step title="5. Tetapkan Kriteria">
+        <Step title="6. Tetapkan Kriteria">
           <p>
             Sebelum skrining, isi kriteria inklusi dan eksklusi di halaman Kriteria. Label eksklusi yang Anda
             buat akan muncul sebagai pilihan satu-klik saat menolak artikel.
           </p>
         </Step>
 
-        <Step title="6. Skrining Abstrak">
+        <Step title="7. Skrining Abstrak">
           <p>
             Di halaman Skrining, nilai satu artikel per layar dengan pintasan keyboard:{' '}
             <kbd className="rounded bg-gray-100 px-1">Y</kbd> masuk,{' '}
@@ -90,7 +100,7 @@ export function GuidePage() {
           </p>
         </Step>
 
-        <Step title="7. Full Teks & Ekstraksi">
+        <Step title="8. Full Teks & Ekstraksi">
           <p>
             Artikel yang lolos skrining abstrak muncul di halaman ini. Unggah PDF-nya untuk membaca &amp;
             mencari teks di dalamnya, isi matriks ekstraksi (kolom bisa dikustomisasi) beserta kutipan
@@ -98,14 +108,14 @@ export function GuidePage() {
           </p>
         </Step>
 
-        <Step title="8. Diagram PRISMA">
+        <Step title="9. Diagram PRISMA">
           <p>
             Halaman PRISMA menghitung dan menggambar diagram alur secara otomatis dari data yang sudah Anda
             proses di tahap-tahap sebelumnya — tidak perlu digambar manual. Bisa diunduh PNG/SVG/PDF.
           </p>
         </Step>
 
-        <Step title="9. Draf Bab Metode & Hasil">
+        <Step title="10. Draf Bab Metode & Hasil">
           <p>
             Halaman Draf Metode &amp; Hasil menyusun draf .docx dari seluruh data yang sudah tercatat. Bab
             Pendahuluan, Diskusi, dan Kesimpulan sengaja tidak dibuat otomatis — itu bagian yang harus Anda
@@ -113,7 +123,7 @@ export function GuidePage() {
           </p>
         </Step>
 
-        <Step title="10. Ekspor & Cadangan">
+        <Step title="11. Ekspor & Cadangan">
           <p>
             Di halaman Ekspor: unduh artikel terpilih (RIS/BibTeX), log keputusan (CSV), matriks ekstraksi
             (CSV), seluruh record (CSV), dan yang terpenting —{' '}

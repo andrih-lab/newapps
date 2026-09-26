@@ -1,6 +1,7 @@
 import { NavLink } from 'react-router-dom';
 
 const LINKS = [
+  { to: 'kata-kunci', label: 'Kata Kunci' },
   { to: 'impor', label: 'Impor Data' },
   { to: 'deduplikasi', label: 'Deduplikasi' },
   { to: 'bibliometrik', label: 'Bibliometrik' },

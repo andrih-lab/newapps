@@ -2,13 +2,47 @@
 
 Aplikasi web untuk membantu proses identifikasi, skrining, dan pelaporan
 Systematic Literature Review (SLR), sekaligus analisis bibliometrik. Seluruh
-pemrosesan berjalan di peramban (client-side), tanpa model bahasa.
+pemrosesan berjalan di peramban (client-side), tanpa model bahasa (satu
+pengecualian opsional: saran istilah AI di Perancang Kata Kunci).
 
-Status saat ini: **Pekan 1, 2 & 3 selesai, plus Modul 7, Modul 8, dan
-halaman panduan dari Pekan 4** (lihat `rancang-bangun-aplikasi-slr.md`,
-Bagian 7). Yang tersisa dari Pekan 4: autentikasi/langganan (Modul 9 —
-menunggu kredensial Supabase & Midtrans dari pemilik proyek) dan video
-demo.
+Status saat ini: **Pekan 1, 2 & 3 selesai, plus Modul 7, Modul 8, halaman
+panduan dari Pekan 4, dan Perancang Kata Kunci** (lihat
+`rancang-bangun-aplikasi-slr.md`, Bagian 7). Modul 9 (akun & langganan)
+**ditunda**: aplikasi saat ini dipakai pribadi oleh pemiliknya.
+
+## Perancang Kata Kunci (halaman pertama tiap proyek)
+
+Alur sekali klik dari topik ke string pencarian yang siap dipakai:
+
+1. Topik dipecah menjadi **blok konsep** di kata penghubung (of, in, on, and…).
+2. Tiap konsep diperluas otomatis dari: tesaurus **AGROVOC** (FAO, gratis,
+   tanpa kunci), **varian** ejaan Inggris/Amerika & singkatan baku,
+   **wilayah** (kawasan → negara/pulau), dan **penambangan literatur** —
+   frasa 2–3 kata & kata kunci yang sering muncul di ≤ 200 artikel OpenAlex
+   paling relevan (1–2 panggilan pencarian).
+3. Pengguna mencentang/menghapus istilah; setiap istilah menyimpan asalnya
+   (terlihat sebagai label & tooltip). "Hitung hit" mengecek jumlah hasil
+   tiap istilah di OpenAlex (menandai istilah 0 hit atau terlalu umum).
+4. String disusun untuk **OpenAlex, Scopus, Web of Science, Google Scholar**
+   (≤ 256 karakter, istilah ber-hit terbanyak diprioritaskan), dan
+   **literatur Indonesia** dari padanan Indonesia per konsep. Istilah yang
+   tercakup istilah lebih pendek di konsep yang sama dibuang otomatis.
+5. **Uji paper kunci**: tempel DOI artikel yang pasti relevan → recall
+   string + kata kunci artikel yang terlewat untuk ditambahkan satu klik.
+6. Tombol "Cari & Impor" mengisi form OpenAlex di halaman Impor; seluruh
+   strategi, termasuk hasil uji recall, masuk otomatis ke draf Bab Metode.
+
+**Saran AI (Gemini) bersifat opsional & mati secara bawaan.** Kunci API
+disimpan hanya di `localStorage` peramban pengguna dan dikirim langsung ke
+Google; usulan AI masuk tanpa tercentang dan diberi label "AI", dan bila
+dipakai, Bab Metode menyebutkannya secara eksplisit.
+
+**Kuota OpenAlex.** OpenAlex kini memakai kuota harian berbasis biaya
+(pencarian ≈ $0,001, filter ≈ $0,0001; tanpa API key ≈ $0,10/hari). Sisa
+kuota dibaca dari header `X-RateLimit-Remaining-USD` dan ditampilkan di
+halaman; "Hitung hit" meminta konfirmasi bila lebih dari 5 pencarian.
+Halaman ini dimuat sebagai chunk terpisah (`React.lazy`) agar bundle utama
+tidak bertambah.
 
 ## Yang sudah ada di Pekan 1 — fondasi & demo tercepat
 

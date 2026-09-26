@@ -1,5 +1,6 @@
 import { db } from '../db';
 import type { MatrixColumnDef, Project } from '../../types/project';
+import type { StrategiPencarian } from '../../types/keywords';
 
 export async function createProject(nama: string, pertanyaanPenelitian: string): Promise<Project> {
   const now = new Date().toISOString();
@@ -28,6 +29,10 @@ export async function touchProject(id: string): Promise<void> {
 
 export async function updateExtractionColumns(id: string, kolomEkstraksi: MatrixColumnDef[]): Promise<void> {
   await db.project.update(id, { kolomEkstraksi, diubah: new Date().toISOString() });
+}
+
+export async function updateSearchStrategy(id: string, strategiPencarian: StrategiPencarian): Promise<void> {
+  await db.project.update(id, { strategiPencarian, diubah: new Date().toISOString() });
 }
 
 export async function deleteProject(id: string): Promise<void> {

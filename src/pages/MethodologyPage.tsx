@@ -16,9 +16,49 @@ export function MethodologyPage() {
         <p className="mt-2">
           Halaman ini menjelaskan rumus dan algoritma yang dipakai aplikasi, agar hasilnya dapat
           dipertanggungjawabkan dan dikutip di bagian Metode publikasi Anda. Seluruh perhitungan berjalan
-          di peramban (client-side), deterministik, dan tidak memakai model bahasa apa pun.
+          di peramban (client-side), deterministik, dan tidak memakai model bahasa apa pun — satu-satunya
+          pengecualian adalah saran istilah AI yang opsional di Perancang Kata Kunci (mati secara bawaan).
         </p>
       </div>
+
+      <section>
+        <h2 className="text-base font-semibold text-gray-900">Perancang Kata Kunci</h2>
+        <p className="mt-2">
+          Strategi pencarian disusun dengan pendekatan <em>blok konsep</em>: topik dipecah menjadi konsep (di kata
+          penghubung seperti <em>of, in, on, and</em>), istilah dalam satu konsep digabung OR, antar-konsep AND.
+          Setiap istilah menyimpan asalnya:
+        </p>
+        <ul className="ml-5 mt-2 list-disc space-y-1">
+          <li>
+            <strong>AGROVOC</strong> (tesaurus FAO): label pilihan dan label alternatif sebuah konsep diusulkan
+            tercentang; istilah lebih sempit dan istilah terkait diusulkan tanpa centang.
+          </li>
+          <li>
+            <strong>Varian</strong>: ejaan Inggris/Amerika dan singkatan baku. Bentuk jamak tidak dibuat karena
+            OpenAlex, Scopus, dan WoS sudah mencakupnya otomatis.
+          </li>
+          <li>
+            <strong>Wilayah</strong>: nama kawasan diperluas ke negara/pulau penyusunnya.
+          </li>
+          <li>
+            <strong>Literatur</strong>: dari ≤ 200 artikel OpenAlex paling relevan untuk string saat ini, dihitung
+            frekuensi dokumen (df) frasa 2–3 kata di judul+abstrak (dibatasi stopword di kedua ujung) dan kata kunci
+            OpenAlex. Kandidat dengan df ≥ max(3, 3% sampel) yang belum tercakup istilah yang ada diurutkan menurut df.
+          </li>
+        </ul>
+        <Formula>{`df(t) = |{ d ∈ sampel : t muncul di judul, abstrak, atau kata kunci d }|`}</Formula>
+        <p className="mt-2">
+          Saat string disusun, istilah yang memuat istilah lain di konsep yang sama (mis. “mangrove forest” bila
+          “mangrove” sudah ada) dibuang karena tidak menambah hasil. <strong>Uji paper kunci</strong> menghitung
+          recall = paper kunci yang terjaring ÷ paper kunci yang terindeks di OpenAlex.
+        </p>
+        <Ref>
+          Rujukan: Bramer, W. M. et al. (2018). A systematic approach to searching: an efficient and complete
+          method to develop literature searches. <em>JMLA</em> 106(4); Hausner, E. et al. (2012). Routine
+          development of objectively derived search strategies. <em>Systematic Reviews</em> 1:19; Rethlefsen, M. L.
+          et al. (2021). PRISMA-S. <em>Systematic Reviews</em> 10:39.
+        </Ref>
+      </section>
 
       <section>
         <h2 className="text-base font-semibold text-gray-900">Deduplikasi</h2>
