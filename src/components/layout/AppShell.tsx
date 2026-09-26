@@ -6,7 +6,9 @@ export function AppShell({ children }: { children: ReactNode }) {
     <div className="min-h-screen bg-gray-50 text-gray-900">
       <header className="border-b border-gray-200 bg-white">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
-          <Link to="/" className="text-lg font-semibold text-indigo-700">
+          <Link to="/" className="flex items-center gap-2 text-lg font-semibold text-indigo-700">
+            {/* Logo pribadi Andri Hendrizal; path relatif karena build memakai base './'. */}
+            <img src="./logo-ah.svg" alt="" width={42} height={24} className="h-6 w-auto" />
             Telaah
           </Link>
           <nav className="flex gap-4 text-sm">
