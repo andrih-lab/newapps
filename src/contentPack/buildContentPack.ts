@@ -151,12 +151,17 @@ function instruksi(o: OpsiPaket, jumlahStudi: number): string {
 5. Tutup dengan daftar celah penelitian (research gaps) yang terlihat dari data, masing-masing dengan rujukan [n].
 Catatan: banyak jurnal mewajibkan pengungkapan penggunaan AI; draf ini akan saya tulis ulang dan periksa.`;
   } else if (o.tujuan === 'blog') {
-    tugas = `Tulis artikel blog populer dalam ${bahasa} untuk pembaca umum, mahasiswa, dan praktisi.
-1. Berikan 3 opsi judul yang menarik tapi tidak menyesatkan, dan satu meta description (≤ 155 karakter).
-2. Panjang 1.200–1.800 kata, struktur H2/H3, paragraf pendek, istilah teknis dijelaskan dengan bahasa sehari-hari atau analogi.
-3. Buka dengan hook yang relevan dengan kehidupan pembaca; sisipkan 2–3 angka menarik dari Bagian 3.
-4. Sertakan bagian "Apa artinya?" (implikasi praktis) dan "Yang belum kita ketahui" (celah penelitian).
-5. Rujukan ditulis [n] di teks, lalu daftar pustaka lengkap dengan tautan DOI di akhir.`;
+    // Kerangka TANYA milik penulis (lihat repo konten: docs/framework-tanya.md).
+    tugas = `Tulis artikel blog keilmuan dalam ${bahasa} dengan kerangka TANYA: "Satu pertanyaan, jawab di depan, buktikan dengan tautan, akui batasnya, akhiri dengan ajakan." Ini kebalikan IMRAD — jawaban di depan.
+Format: Markdown, 800–1.200 kata, subjudul tiap 200–300 kata, kalimat rata-rata < 20 kata, satu paragraf satu gagasan. Jangan menulis label T/A/N/Y/A di teks.
+1. JUDUL: pertanyaan yang sudah ada di kepala pembaca awam (atau memuat ketegangan); bukan judul jurnal, bukan topik klise. Beri juga 2 alternatif (satu aman untuk mesin pencari, satu lebih memancing).
+2. T — Tanya: buka dari SATU pertanyaan pembaca awam (nelayan, mahasiswa, pejabat desa, orang tua), bukan dari topik; tanpa "dan" yang menjadikannya dua pertanyaan. Pertanyaan lain hanya pelayan.
+3. A — Awali dengan jawaban: pesan utama selesai di paragraf 2–3, bisa dinyatakan dalam satu kalimat < 25 kata. Dilarang: pembukaan latar belakang gaya jurnal, "janji jawaban" tanpa mekanisme konkret, kalimat meta tentang tulisan.
+4. N — Nyatakan bukti: pilih 3–7 studi TERKUAT dari Bagian 4 (utamakan artikel tinjauan/review), kelompokkan bukti per masalah. Di badan tulisan pakai tautan Markdown langsung ke DOI sebagai "tautan diam-diam" (bukan [n] dan bukan Nama, Tahun); penyebutan naratif maksimal 1–2 kali dengan nama jurnal/lembaga. Setiap angka bertautan dan dikalibrasi persis pada cakupan sumbernya; hindari generalisasi; jelaskan istilah teknis saat pertama muncul.
+5. Y — Yakinkan dengan nuansa: satu paragraf jujur tentang yang belum diketahui, perdebatan, atau keteralihan konteks (pakai Bagian 3 dan 6).
+6. A — Ajak bertindak: satu hal konkret dan proporsional yang bisa dilakukan pembaca biasa; tanpa penutup klise.
+7. "## Sumber dan bacaan lanjutan": studi yang dipakai, masing-masing diawali satu baris keterangan ("Untuk …: sitasi. DOI"). Minimal satu sumber open access — bila status akses tidak diketahui dari paket, tandai [cek open access].
+8. Setelah tulisan, beri bagian terpisah "--- CATATAN PENYUNTING (jangan diterbitkan) ---": daftar periksa TANYA (✅/⚠️ + alasan) dan tabel audit klaim (klaim | jenis: pengetahuan umum/butuh rujukan/angka | sumber [n] atau [perlu rujukan]).`;
   } else {
     tugas = `Tulis naskah video YouTube faceless (tanpa wajah, dengan narasi suara) dalam ${bahasa}, durasi 8–10 menit (±1.200–1.400 kata narasi).
 1. Berikan 3 opsi judul, teks thumbnail (maks. 5 kata), deskripsi video dengan chapter/penanda waktu, dan 10 tag.
